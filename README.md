@@ -1,85 +1,10 @@
-# Spring Boot + Auth0 OIDC SSO Demo
-
-Ứng dụng mẫu tích hợp SSO với Auth0 sử dụng giao thức **OIDC** (không phải SAML) kết hợp:
-
-- Spring Boot 3 (Java 21)
-- Spring Security (OAuth2 Client + Resource Server JWT)
-- Auth0 (OIDC Provider)
-- Thymeleaf (MVC + View)
-- REST API (public & private)
-- JWT validation cho các endpoint `/api/**`
-
-## 1. Chuẩn bị trên Auth0
-1. Tạo tài khoản / đăng nhập Auth0.
-2. Vào Dashboard > Applications > Create Application:
-   - Name: `spring-oidc-demo`
-   - Type: Regular Web Application.
-3. Lấy `Domain`, `Client ID`, `Client Secret`.
-4. Cấu hình Allowed Callback URLs:
-   - `http://localhost:8080/login/oauth2/code/auth0`
-5. Allowed Logout URLs:
-   - `http://localhost:8080/`
-6. Allowed Web Origins:
-   - `http://localhost:8080`
-7. (Tuỳ chọn) Nếu cần Access Token cho API riêng, tạo một API trong Auth0 (tab APIs) và lấy giá trị Identifier làm `AUTH0_AUDIENCE`.
-
-## 2. Biến môi trường (khuyến nghị)
-Thiết lập trong hệ thống hoặc IDE:
-```
-AUTH0_DOMAIN=your-tenant-region.auth0.com
-AUTH0_CLIENT_ID=xxxxxxxxxxxxxxxx
-AUTH0_CLIENT_SECRET=xxxxxxxxxxxxxxxx
-AUTH0_AUDIENCE=https://your-api-identifier (nếu dùng)
-```
-
-Hoặc sửa trực tiếp trong `src/main/resources/application.yml` (không khuyến nghị commit secret thật).
-
-## 3. Chạy ứng dụng
-### Maven
-```cmd
-mvn spring-boot:run
-```
-Hoặc build jar:
-```cmd
-mvn clean package
-java -jar target/untitled-1.0-SNAPSHOT.jar
-```
-
-Mở trình duyệt: http://localhost:8080
-
-## 4. Các endpoint
-| Endpoint | Mô tả | Bảo vệ |
-|----------|-------|--------|
-| `/` | Trang chủ | Công khai (hiển thị login nếu chưa auth) |
-| `/profile` | Thông tin user (claims, id token) | Yêu cầu đăng nhập |
-| `/api/public` | REST public | Công khai |
-| `/api/private` | REST private trả JWT claims | Yêu cầu JWT / session |
-
-## 5. Cơ chế bảo mật
-- Đăng nhập qua OIDC Authorization Code Flow (`/oauth2/authorization/auth0`).
-- Sau khi login, session chứa principal `OidcUser` để hiển thị claims ở Thymeleaf.
-- Resource Server JWT: Nếu gọi `/api/private` bằng Bearer Token hợp lệ (issuer = Auth0 domain) thì trích xuất claims từ JWT.
-- Nếu gọi qua trình duyệt sau login, Security sẽ dùng session (principal có thể không là Jwt) -> code xử lý cả hai trường hợp.
-
-## 6. Tuỳ chỉnh Audience
-Nếu muốn token có audience cho API (để dùng ở backend khác), đặt biến `AUTH0_AUDIENCE`. Code đã chèn tham số `audience` vào authorization request.
-
-## 7. Ghi chú phát triển
-- Tắt cache Thymeleaf (dev) trong `application.yml`.
-- Có thể thêm role mapping từ claim `permissions` hay `roles` nếu cấu hình Rule/Action trong Auth0.
-
-## 8. Mở rộng
-- Thêm controller cho refresh token silent (SPA) hoặc PKCE cho public client.
-- Thêm CustomGrantedAuthoritiesConverter để map quyền nâng cao.
-- Viết integration test bằng `spring-security-test` với JWT giả.
-
-## 9. Vấn đề thường gặp
-| Lỗi | Nguyên nhân | Cách xử lý |
-|-----|-------------|-----------|
-| `invalid_redirect_uri` | Chưa khai báo URL callback | Thêm đúng URL trong Auth0 settings |
-| 403 khi gọi `/api/private` với token | Audience/issuer sai | Kiểm tra domain & audience, token đúng API? |
-| 401 khi chưa login | Hành vi bình thường | Đăng nhập qua link login |
-
-## 10. License
-MIT (tuỳ bạn chọn cập nhật).
-
+<img width="433" height="850" alt="Screenshot 2025-10-06 113635" src="https://github.com/user-attachments/assets/6583cb7b-541b-49dd-847c-34339a817909" />
+<img width="1151" height="179" alt="Screenshot 2025-10-06 113403" src="https://github.com/user-attachments/assets/e55eb5d2-4a7e-45f7-ada7-193adaf02fe6" />
+<img width="1848" height="873" alt="Screenshot 2025-10-06 113139" src="https://github.com/user-attachments/assets/5614869c-44a2-405c-82ad-db333bd30ca8" />
+<img width="1841" height="874" alt="Screenshot 2025-10-06 110021" src="https://github.com/user-attachments/assets/fd1d1505-0c1c-4a50-a520-1088287d082d" />
+<img width="1281" height="340" alt="Screenshot 2025-10-06 111450" src="https://github.com/user-attachments/assets/eaf94022-ff7b-49d7-a5d4-1d8733ef2cb3" />
+<img width="1303" height="496" alt="Screenshot 2025-10-06 111726" src="https://github.com/user-attachments/assets/650b9bcb-5494-46de-8be5-e554ff402cd9" />
+<img width="1838" height="863" alt="Screenshot 2025-10-06 112253" src="https://github.com/user-attachments/assets/e7cda471-f5a1-4ccf-8163-ae60c58d4596" />
+<img width="1859" height="881" alt="Screenshot 2025-10-06 112601" src="https://github.com/user-attachments/assets/3ddbfec8-24c8-48e8-ac43-dd029e5af572" />
+<img width="1837" height="867" alt="Screenshot 2025-10-06 112933" src="https://github.com/user-attachments/assets/5aa5c2d4-617a-4476-b94f-3098a9715615" />
+<img width="1849" height="814" alt="Screenshot 2025-10-06 113117" src="https://github.com/user-attachments/assets/11e09db1-1cc8-4e5d-a9a7-a471b8397cb2" />
